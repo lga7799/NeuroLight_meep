@@ -2,56 +2,55 @@
 
 ## Ring Resonator:
 
-    -Radius
-    -Waveguide Width
-    -Positional Offset/Position from Source
+    -Radius [2um, 10um]
+    -Waveguide Width [0.4 um,0.8 um]
+    -Positional Offset/Position from Source [Constant]
     
 ## Single Coupled Ring Resonator:
 #Example: All-Pass Ring Resonator
 
-    -Radius
-    -Ring Waveguide Width
-    -Positional Offset/Position from Source
-    -Coupled Waveguide Width
-    -Coupled Waveguide Length
-    -Position of Waveguide from Ring
+    -Radius [2um, 10um]
+    -Ring Waveguide Width [0.4 um, 0.8 um]
+    -Positional Offset/Position from Source [Constant]
+    -Coupled Waveguide Width [0.4 um, 0.8 um]
+    -Coupled Waveguide Length [Diameter of ring, Length of Box]
+    -Position/Gap of Waveguide from Ring [0.1um, 0.4um]
     
 ## Double Coupled Ring Resonator:
 #Example: Add-Drop Ring Resonator
 
-    -Radius
-    -Ring Waveguide Width
-    -Positional Offset/Position from Source
-    -Coupled Waveguide Width 1
-    -Coupled Waveguide Length 1
-    -Coupled Waveguide Width 2
-    -Coupled Waveguide Length 2
-    -Position of Waveguide1 from Ring
-    -Position of Waveguide2 from Ring
+    -Radius [2um, 10um]
+    -Ring Waveguide Width [0.4 um,0.8 um]
+    -Positional Offset/Position from Source [Constant]
+    -Coupled Waveguide Width 1 [0.4 um,0.8 um]
+    -Coupled Waveguide Length 1 [Diameter of ring, Length of Box]
+    -Coupled Waveguide Width 2 [0.4 um,0.8 um]
+    -Coupled Waveguide Length 2 [Diameter of ring, Length of Box]
+    -Position/Gap of Waveguide1 from Ring [0.1um, 0.4um]
+    -Position/Gap of Waveguide2 from Ring [0.1um, 0.4um]
     
 ## Perpendicular couplers Ring Resonator
     
-    -Radius
-    -Ring Waveguide Width
+    -Radius [2um, 10um]
+    -Ring Waveguide Width [0.4 um,0.8 um]
     -Positional Offset/Position from Source
-    -Coupled Waveguide Width 1
-    -Coupled Waveguide Length 1
-    -Coupled Waveguide Width 2
-    -Coupled Waveguide Length 2
-    -Position of Waveguide1 from Ring
-    -Position of Waveguide2 from Ring
+    -Coupled Waveguide Width 1 [0.4 um,0.8 um]
+    -Coupled Waveguide Length 1 [Diameter of ring, Length of Box]
+    -Coupled Waveguide Width 2 [0.4 um,0.8 um]
+    -Coupled Waveguide Length 2 [Diameter of ring, Length of Box]
+    -Position/Gap of Waveguide1 from Ring [0.1um, 0.4um]
+    -Position/Gap of Waveguide2 from Ring [0.1um, 0.4um]
     
 ## Double Ring Resonator
 
-    -Radius 1
-    -Ring Waveguide Width 1
-    -Radius 2
-    -Ring Waveguide Width 2
-    -Position 1
-    -Position 2
-    -Coupled Waveguide Width 1
-    -Coupled Waveguide Length 1
-    -Coupled Waveguide Width 2
-    -Coupled Waveguide Length 2
-    -Position of Waveguide1
-    -Position of Waveguide2
+    -Radius 1 [2um, 10um]
+    -Ring Waveguide Width 1 [0.4 um,0.8 um]
+    -Radius 2 [2um, 10um]
+    -Ring Waveguide Width 2 [0.4 um,0.8 um]
+    -Gap between Rings [0.1um,0.4um]
+    -Coupled Waveguide Width 1 [0.4 um,0.8 um]
+    -Coupled Waveguide Length 1 [Diameter of ring, Length of Box]
+    -Coupled Waveguide Width 2 [0.4 um,0.8 um]
+    -Coupled Waveguide Length 2 [Diameter of ring, Length of Box]
+    -Position/Gap of Waveguide1 [0.1um, 0.4um]
+    -Position/Gap of Waveguide2 [0.1um, 0.4um]
