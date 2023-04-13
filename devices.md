@@ -1,10 +1,12 @@
 # Device Physical Parameters Sweep
 
 ## Ring Resonator:
+
     -Radius
     -Waveguide Width
     -Positional Offset/Position from Source
 ## Single Coupled Ring Resonator:
+#Example: All-Pass Ring Resonator 
     -Radius
     -Ring Waveguide Width
     -Positional Offset/Position from Source
@@ -12,6 +14,7 @@
     -Coupled Waveguide Length
     -Position of Waveguide from Ring
 ## Double Coupled Ring Resonator:
+#Example: Add-Drop Ring Resonator
     -Radius
     -Ring Waveguide Width
     -Positional Offset/Position from Source
@@ -22,6 +25,7 @@
     -Position of Waveguide1 from Ring
     -Position of Waveguide2 from Ring
 ## Perpendicular couplers Ring Resonator
+#Example
     -Radius
     -Ring Waveguide Width
     -Positional Offset/Position from Source
@@ -31,3 +35,5 @@
     -Coupled Waveguide Length 2
     -Position of Waveguide1 from Ring
     -Position of Waveguide2 from Ring
+## Double Ring Resonator
+    -Radius 1
