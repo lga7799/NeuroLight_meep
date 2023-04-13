@@ -54,3 +54,10 @@
     -Coupled Waveguide Length 2 [Diameter of ring, Length of Box]
     -Position/Gap of Waveguide1 [0.1um, 0.4um]
     -Position/Gap of Waveguide2 [0.1um, 0.4um]
+    
+## References
+[Design Space Exploration of Microring Resonators in Silicon Photonic Interconnects: Impact of theRing Curvature
+](https://ieeexplore.ieee.org/document/8328825)
+
+Silicon Photonic Microring Resonators: Design Optimization Under Fabrication Non-Uniformity
+https://ieeexplore.ieee.org/abstract/document/9116201
