@@ -26,29 +26,29 @@ def generate_IO(n_ports, box_width, box_height, port_width):
 
 if __name__ == "__main__":
 
-    width = 20
-    height = 5
+    width = 15
+    height = 8
 
-    box_width = width*0.8
+    box_width = width*0.6
     box_height = height*0.9
 
     block = mp.Block(mp.Vector3(box_width, box_height,1), material=NL_Si)
 
-    I,O = generate_IO(2, box_width, box_height, box_width/10.0)
+    I,O = generate_IO(2, box_width, box_height, box_width/5.0)
 
-    freq = omega(1.53)
-    duration = 1e-9
+    freq = omega(2)
+    duration = 1e-6
 
-    sources = [mp.Source(mp.GaussianSource(freq, width=duration), mp.Hz, center=i.center) for i in I]
+    sources = [mp.Source(mp.GaussianSource(freq+freq*k, width=duration+k*10*duration), mp.Hz, center=i.center) for k,i in enumerate(I)]
 
     sim = Simulation(
         grid_size=(width,height),
-        grid_resolution=20,
+        grid_resolution=40,
         geometry=[block]+I+O,
         sources=sources
     )
 
-    sim.run(until_after_sources=200, sample_interval=0.1)
+    sim.run(until_after_sources=100, sample_interval=0.1)
 
-    export_video(sim, export_path="example.mp4", scale=3)
+    export_video(sim, export_path="example.mp4", scale=2)
 

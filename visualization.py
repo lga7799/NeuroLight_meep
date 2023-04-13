@@ -23,7 +23,7 @@ def export_video(simulation, export_path, scale=1):
     eps_mask = eps_data==eps_data.min()
 
     shape = np.zeros_like(eps_data)
-    shape[eps_mask] = 51 # 0.2 * 255
+    shape[eps_mask] = 30 # 0.2 * 255
 
     frames = process_map(partial(worker,shape=shape[:,:,None]), simulation.output, desc="Generating Frames")
 
