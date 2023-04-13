@@ -27,7 +27,6 @@
     -Position of Waveguide1 from Ring
     -Position of Waveguide2 from Ring
 ## Perpendicular couplers Ring Resonator
-#Example
     
     -Radius
     -Ring Waveguide Width
@@ -39,5 +38,16 @@
     -Position of Waveguide1 from Ring
     -Position of Waveguide2 from Ring
 ## Double Ring Resonator
+
     -Radius 1
+    -Ring Waveguide Width 1
     -Radius 2
+    -Ring Waveguide Width 2
+    -Position 1
+    -Position 2
+    -Coupled Waveguide Width 1
+    -Coupled Waveguide Length 1
+    -Coupled Waveguide Width 2
+    -Coupled Waveguide Length 2
+    -Position of Waveguide1
+    -Position of Waveguide2
