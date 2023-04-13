@@ -5,6 +5,7 @@
     -Radius
     -Waveguide Width
     -Positional Offset/Position from Source
+    
 ## Single Coupled Ring Resonator:
 #Example: All-Pass Ring Resonator
 
@@ -14,6 +15,7 @@
     -Coupled Waveguide Width
     -Coupled Waveguide Length
     -Position of Waveguide from Ring
+    
 ## Double Coupled Ring Resonator:
 #Example: Add-Drop Ring Resonator
 
@@ -26,6 +28,7 @@
     -Coupled Waveguide Length 2
     -Position of Waveguide1 from Ring
     -Position of Waveguide2 from Ring
+    
 ## Perpendicular couplers Ring Resonator
     
     -Radius
@@ -37,6 +40,7 @@
     -Coupled Waveguide Length 2
     -Position of Waveguide1 from Ring
     -Position of Waveguide2 from Ring
+    
 ## Double Ring Resonator
 
     -Radius 1
