@@ -42,6 +42,10 @@ class waveguide_block(object):
         return mp.Block(mp.Vector3(self.dimensions[0],self.dimensions[1],0),
             center=mp.Vector3(self.center[0],self.center[1],0),
             material=mp.Medium(index=self.index))
+    
+    def source(self, freq):
+        return mp.Source(mp.ContinuousSource(frequency=freq),component=mp.Ez,
+               center=mp.Vector3(-((self.dimensions[0]-1)/2),self.center[1],0))
 
 def ring():
     r=2.2 #inner radius
@@ -70,13 +74,14 @@ def waveguide():
 
 def ring_doublecoupled():
     r=2.2 #inner radius
-    l=4 #length
+    l=12 #length
     w = np.random.uniform(0.8, 1.1)
     x_offset1=0
     y_offset1=-4
     x_offset2=0
     y_offset2=4
     index_si = 3.48
+    freq=0.15
     ring = ring_r_w(
         radius=r,
         index=index_si,
@@ -93,15 +98,16 @@ def ring_doublecoupled():
         center=(x_offset2,y_offset2),
     )
     (cyl1, cyl2) = ring.geo()
-    return [cyl1, cyl2, wg1.geo(), wg2.geo()]
+    return ([cyl1, cyl2, wg1.geo(), wg2.geo()], [wg1.source(freq)])
 
 def ring_singlecoupled():
     r=2.2 #inner radius
-    l=4 #length
+    l=10 #length
     w = np.random.uniform(0.8, 1.1)
     x_offset1=0
-    y_offset1=-4
+    y_offset1=-3.5
     index_si = 3.48
+    freq=0.15
     ring = ring_r_w(
         radius=r,
         index=index_si,
@@ -110,11 +116,11 @@ def ring_singlecoupled():
     wg1 = waveguide_block(
         dimensions=(l,w),
         index=index_si,
-        center=(x_offset1,y_offset1),
+        center=(x_offset1,y_offset1)
     )
     (cyl1, cyl2) = ring.geo()
-    ring_coupter=[cyl1,cyl2,wg1.geo()]
-    return ring_coupter
+    ring_coupler=[cyl1,cyl2,wg1.geo()]
+    return (ring_coupler, [wg1.source(freq)])
 
 def ring_perp_coupler():
     r=2.2 #inner radius
@@ -125,6 +131,7 @@ def ring_perp_coupler():
     x_offset2=4
     y_offset2=0
     index_si = 3.48
+    freq=0.15
     ring = ring_r_w(
         radius=r,
         index=index_si,
@@ -142,34 +149,36 @@ def ring_perp_coupler():
     )
     (cyl1, cyl2) = ring.geo()
     ring_coupler=[cyl1,cyl2,wg1.geo(), wg2.geo()]
-    return ring_coupler
+    return (ring_coupler, [wg1.source(freq)])
 
 def doublering():
-    r = 2.2
-    l = 8
+    r1 = 2.2
+    r2 = 2
+    l = 12
     w = np.random.uniform(0.8, 1.1)
     index_si = 3.48
+    freq = 0.15
     ring1 = ring_r_w(
-        radius=r,
+        radius=r1,
         index=index_si,
         ring_width=w,
     )
     ring2 = ring_r_w(
-        radius=r,
+        radius=r2,
         index=index_si,
         ring_width=w,
-        center=(0,(2*r)+w)
+        center=(0,r1+(2*w)+r2)
     );
     wg1 = waveguide_block(
         dimensions=(l,w),
         index=index_si,
-        center=(0,-(r+w))
+        center=(0,-(r1+w))
     );
     wg2 = waveguide_block(
         dimensions=(l,w),
         index=index_si,
-        center=(0,(3*r+2*w))
+        center=(0,r1+(3*w)+(2*r2))
     );
     (cyl1, cyl2) = ring1.geo()
     (cyl3, cyl4) = ring2.geo()
-    return [cyl1, cyl2, cyl3, cyl4, wg1.geo(), wg2.geo()]
+    return ([cyl1, cyl2, cyl3, cyl4, wg1.geo(), wg2.geo()], [wg1.source(freq)])
