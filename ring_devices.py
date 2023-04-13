@@ -1,14 +1,12 @@
 from typing import Optional, Tuple
 import numpy as np
-from angler.structures import get_grid
-import torch
 import meep as mp
 #from pyutils.compute import gen_gaussian_filter2d_cpu
 from itertools import product
 
 eps_sio2 = 1.44 ** 2
 eps_si = 3.48 ** 2
-
+        
 class ring_r_w(object):
     def __init__(
         self,
@@ -17,12 +15,17 @@ class ring_r_w(object):
         index: float = 3.4,
         center:Tuple[float,float] = (0,0),
     ):
-        super().init()
+        super().__init__()
         self.radius=radius
         self.ring_width=ring_width
         self.index=index
         self.center=center
-
+        
+    def geo(self):
+        r1 = mp.Cylinder(radius=self.radius+self.ring_width, material=mp.Medium(index=self.index), center=mp.Vector3(self.center[0],self.center[1],0))
+        r2 = mp.Cylinder(radius=self.radius, center=mp.Vector3(self.center[0],self.center[1],0))
+        return (r1, r2) 
+    
 class waveguide_block(object):
     def __init__(
         self,
@@ -30,10 +33,15 @@ class waveguide_block(object):
         center: Tuple[float,float] = (0,0),  # in/out wavelength width, um
         index: float = 3.4,
     ):
-        super().init()
+        super().__init__()
         self.dimensions=dimensions
         self.center=center
         self.index=index
+        
+    def geo(self):
+        return mp.Block(mp.Vector3(self.dimensions[0],self.dimensions[1],0),
+            center=mp.Vector3(self.center[0],self.center[1],0),
+            material=mp.Medium(index=self.index))
 
 def ring():
     r=2.2 #inner radius
@@ -44,7 +52,8 @@ def ring():
         index=index_si,
         ring_width=w,
     )
-    return ring
+    (r1, r2) = ring.geo()
+    return [r1, r2]
 
 def waveguide():
     l=4 #length
@@ -57,7 +66,7 @@ def waveguide():
         index=index_si,
         center=(x_offset,y_offset),
     )
-    return wg
+    return wg.geo()
 
 def ring_doublecoupled():
     r=2.2 #inner radius
@@ -83,17 +92,8 @@ def ring_doublecoupled():
         index=index_si,
         center=(x_offset2,y_offset2),
     )
-    cyl1=mp.Cylinder(radius=ring.radius+ring.ring_width, material=mp.Medium(index=index_si))
-    cyl2=mp.Cylinder(radius=ring.radius)
-    block1 = mp.Block(mp.Vector3(wg1.dimensions[0],wg1.dimensions[1],0),
-                     center=mp.Vector3(wg1.center[0],wg1.center[1],0),
-                     material=mp.Medium(index=wg1.index))
-    
-    block2 = mp.Block(mp.Vector3(wg2.dimensions[0],wg2.dimensions[1],0),
-                     center=mp.Vector3(wg2.center[0],wg2.center[1],0),
-                     material=mp.Medium(index=wg2.index))
-    ring_coupler=[cyl1,cyl2,block2, block1]
-    return ring_coupler
+    (cyl1, cyl2) = ring.geo()
+    return [cyl1, cyl2, wg1.geo(), wg2.geo()]
 
 def ring_singlecoupled():
     r=2.2 #inner radius
@@ -112,13 +112,8 @@ def ring_singlecoupled():
         index=index_si,
         center=(x_offset1,y_offset1),
     )
-    
-    cyl1=mp.Cylinder(radius=ring.radius+ring.ring_width, material=mp.Medium(index=index_si))
-    cyl2=mp.Cylinder(radius=ring.radius)
-    block1 = mp.Block(mp.Vector3(wg1.dimensions[0],wg1.dimensions[1],0),
-                     center=mp.Vector3(wg1.center[0],wg1.center[1],0),
-                     material=mp.Medium(index=wg1.index))
-    ring_coupter=[cyl1,cyl2,block1]
+    (cyl1, cyl2) = ring.geo()
+    ring_coupter=[cyl1,cyl2,wg1.geo()]
     return ring_coupter
 
 def ring_perp_coupler():
@@ -145,14 +140,36 @@ def ring_perp_coupler():
         index=index_si,
         center=(x_offset2,y_offset2),
     )
-    cyl1=mp.Cylinder(radius=ring.radius+ring.ring_width, material=mp.Medium(index=index_si))
-    cyl2=mp.Cylinder(radius=ring.radius)
-    block1 = mp.Block(mp.Vector3(wg1.dimensions[0],wg1.dimensions[1],0),
-                     center=mp.Vector3(wg1.center[0],wg1.center[1],0),
-                     material=mp.Medium(index=wg1.index))
-    
-    block2 = mp.Block(mp.Vector3(wg2.dimensions[0],wg2.dimensions[1],0),
-                     center=mp.Vector3(wg2.center[0],wg2.center[1],0),
-                     material=mp.Medium(index=wg2.index))
-    ring_coupler=[cyl1,cyl2,block2, block1]
+    (cyl1, cyl2) = ring.geo()
+    ring_coupler=[cyl1,cyl2,wg1.geo(), wg2.geo()]
     return ring_coupler
+
+def doublering():
+    r = 2.2
+    l = 8
+    w = np.random.uniform(0.8, 1.1)
+    index_si = 3.48
+    ring1 = ring_r_w(
+        radius=r,
+        index=index_si,
+        ring_width=w,
+    )
+    ring2 = ring_r_w(
+        radius=r,
+        index=index_si,
+        ring_width=w,
+        center=(0,(2*r)+w)
+    );
+    wg1 = waveguide_block(
+        dimensions=(l,w),
+        index=index_si,
+        center=(0,-(r+w))
+    );
+    wg2 = waveguide_block(
+        dimensions=(l,w),
+        index=index_si,
+        center=(0,(3*r+2*w))
+    );
+    (cyl1, cyl2) = ring1.geo()
+    (cyl3, cyl4) = ring2.geo()
+    return [cyl1, cyl2, cyl3, cyl4, wg1.geo(), wg2.geo()]
