@@ -3,7 +3,10 @@ import numpy as np
 import meep as mp
 #from pyutils.compute import gen_gaussian_filter2d_cpu
 from itertools import product
-from simulation import NL_Si, NL_SiO2
+from simulation import NL_Si, NL_SiO2, omega
+
+eps_sio2 = 1.44 ** 2
+eps_si = 3.48 ** 2
         
 class ring_r_w(object):
     def __init__(
@@ -19,7 +22,7 @@ class ring_r_w(object):
         
     def geo(self):
         r1 = mp.Cylinder(radius=self.radius+self.ring_width, material=NL_Si, center=mp.Vector3(self.center[0],self.center[1],0))
-        r2 = mp.Cylinder(radius=self.radius, material=NL_SiO2,center=mp.Vector3(self.center[0],self.center[1],0))
+        r2 = mp.Cylinder(radius=self.radius, material=NL_SiO2, center=mp.Vector3(self.center[0],self.center[1],0))
         return (r1, r2) 
     
 class waveguide_block(object):
@@ -32,16 +35,15 @@ class waveguide_block(object):
         super().__init__()
         self.dimensions=dimensions
         self.center=center
-        self.index=index
         
     def geo(self):
         return mp.Block(mp.Vector3(self.dimensions[0],self.dimensions[1],0),
             center=mp.Vector3(self.center[0],self.center[1],0),
-            material=mp.Medium(index=self.index))
+            material=NL_Si)
     
-    def source(self, freq):
-        return mp.Source(mp.GaussianSource(frequency=freq, width=1e-6),component=mp.Hz,
-               center=mp.Vector3(-((self.dimensions[0]-2)/2),self.center[1],0))
+    def source(self, freq, duration):
+         return mp.Source(mp.GaussianSource(freq, width=duration),component=mp.Hz,
+               center=mp.Vector3(-((self.dimensions[0]-1)/2),self.center[1],0))
 
 def ring():
     r = 2 #inner radius
@@ -88,24 +90,20 @@ def ring_doublecoupled():
     (cyl1, cyl2) = ring.geo()
     return ([cyl1, cyl2, wg1.geo(), wg2.geo()], [wg1.source(freq)])
 
-def ring_singlecoupled():
-    r=2.2 #inner radius
-    l=10 #length
-    w = np.random.uniform(0.8, 1.1)
-    x_offset1=0
-    y_offset1=-3.4
-    freq=0.15
+def ring_singlecoupled(radius, width, wg_length, wg_width, wvlen, duration, gap):
+    y_center = -(radius+width+wg_width/2+gap)
+    freq = omega(wvlen)
     ring = ring_r_w(
-        radius=r,
-        ring_width=w,
+        radius=radius,
+        ring_width=width,
     )
     wg1 = waveguide_block(
-        dimensions=(l,w),
-        center=(x_offset1,y_offset1)
+        dimensions=(wg_length,wg_width),
+        center=(0,y_center)
     )
     (cyl1, cyl2) = ring.geo()
     ring_coupler=[cyl1,cyl2,wg1.geo()]
-    return (ring_coupler, [wg1.source(freq)])
+    return (ring_coupler, [wg1.source(freq,duration)])
 
 def ring_perp_coupler():
     r=2.5 #inner radius
